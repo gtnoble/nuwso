@@ -64,6 +64,51 @@ module RandomTools
     end
   end
 
+  class RunningStats
+    def initialize(initial_sample)
+      @accumulated_sum = initial_sample
+      @n = 1.0
+      @sum_squares = 0.0
+      @mean = initial_sample
+
+    end
+
+    def update(next_sample)
+        @accumulated_sum += next_sample
+        @n += 1.0
+        previous_mean = @mean
+        @mean = @accumulated_sum / @n
+        previous_sum_squares = @sum_squares
+
+        @sum_squares = previous_sum_squares + 
+                       (next_sample - previous_mean) * 
+                       (next_sample - mean)
+
+    end
+
+    def sample_variance
+      @sum_squares / (@n - 1)
+    end
+
+    def population_variance
+      @sum_squares / @n
+    end
+
+    def mean
+      @mean
+    end
+
+    def sample_standard_deviation
+      Math.sqrt(sample_variance)
+    end
+
+    def standard_error
+      sample_standard_deviation / Math.sqrt(@n)
+    end
+
+  end
+
+  
 end
 
 binding.pry 
